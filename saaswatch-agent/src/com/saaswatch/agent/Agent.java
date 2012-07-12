@@ -15,6 +15,7 @@ import javax.management.remote.JMXConnectorServerFactory;
 import javax.management.remote.JMXConnectorServerMBean;
 import javax.management.remote.JMXServiceURL;
 
+import com.saaswatch.agent.probe.MemoryProbe;
 import com.sun.jdmk.discovery.DiscoveryResponder;
 import com.sun.jdmk.discovery.DiscoveryResponderMBean;
 
@@ -30,6 +31,8 @@ public class Agent {
 	private MBeanServer mBeanServer;
 	private DiscoveryResponderMBean discoveryResponderMBean;
 	private JMXConnectorServerMBean jmxConnectorServerMBean;
+	
+	MemoryProbe memoryProbe;
 
 	public Agent() throws MalformedURLException, IOException, InstanceAlreadyExistsException, MBeanRegistrationException, NotCompliantMBeanException, MalformedObjectNameException, NullPointerException {
 		
@@ -50,6 +53,9 @@ public class Agent {
 		
 		discoveryResponderMBean.start();
 		jmxConnectorServerMBean.start();
+		
+		
+		memoryProbe = MemoryProbe.create();
 	}
 
 	// helper
@@ -74,6 +80,8 @@ public class Agent {
 		} catch (IOException e) {
 			processError(e);
 		}
+		
+		memoryProbe.stop();
 	}
 
 	private class ShutdownHook extends Thread {
@@ -86,6 +94,8 @@ public class Agent {
 			} catch (IOException e) {
 				processError(e);
 			}
+			
+			memoryProbe.stop();
 		}
 	}
 	
