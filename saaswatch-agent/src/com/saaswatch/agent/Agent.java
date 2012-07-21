@@ -17,6 +17,7 @@ import javax.management.remote.JMXServiceURL;
 
 import com.saaswatch.agent.probe.MemoryProbe;
 import com.saaswatch.agent.probe.OperatingSystemProbe;
+import com.saaswatch.agent.server.RESTServer;
 import com.sun.jdmk.discovery.DiscoveryResponder;
 import com.sun.jdmk.discovery.DiscoveryResponderMBean;
 
@@ -35,6 +36,8 @@ public class Agent {
 	
 	MemoryProbe memoryProbe;
 	OperatingSystemProbe operatingSystemProbe;
+	
+	RESTServer restServer;
 
 	public Agent() throws MalformedURLException, IOException, InstanceAlreadyExistsException, MBeanRegistrationException, NotCompliantMBeanException, MalformedObjectNameException, NullPointerException {
 		
@@ -53,12 +56,17 @@ public class Agent {
 		mBeanServer.registerMBean(jmxConnectorServerMBean, new ObjectName(DOMAIN,
 				"name", "jmxConnectorServer"));		
 		
+		
 		discoveryResponderMBean.start();
 		jmxConnectorServerMBean.start();
 		
 		
 		memoryProbe = MemoryProbe.create();
 		operatingSystemProbe = OperatingSystemProbe.create();
+		
+		RESTServer restServer = new RESTServer();
+		restServer.start();
+		
 	}
 
 	// helper
@@ -78,6 +86,8 @@ public class Agent {
 		System.out.println("Shutting down");
 		discoveryResponderMBean.stop();
 
+		restServer.stop();
+		
 		try {
 			jmxConnectorServerMBean.stop();
 		} catch (IOException e) {
@@ -90,8 +100,10 @@ public class Agent {
 	private class ShutdownHook extends Thread {
 		public void run() {
 			System.out.println("Shutting down hook");
-
 			discoveryResponderMBean.stop();
+			
+			restServer.stop();
+			
 			try {
 				jmxConnectorServerMBean.stop();
 			} catch (IOException e) {

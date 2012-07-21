@@ -5,5 +5,17 @@
 	<classpathentry kind="lib" path="lib/jdmkrt.jar"/>
 	<classpathentry kind="lib" path="lib/jdmktk.jar"/>
 	<classpathentry kind="lib" path="lib/jmxremote_optional.jar"/>
+	<classpathentry kind="lib" path="lib/commons-cli-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/jaxrs-api-2.3.0.GA.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-all-8.0.4.v20111024.jar"/>
+	<classpathentry kind="lib" path="lib/resteasy-jaxrs-2.3.0.GA.jar"/>
+	<classpathentry kind="lib" path="lib/scannotation-1.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/servlet-api-3.0.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-all-1.9.2.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb-api-2.2.3.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb-impl-2.2.4.jar"/>
+	<classpathentry kind="lib" path="lib/resteasy-jaxb-provider-2.2.3.GA.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

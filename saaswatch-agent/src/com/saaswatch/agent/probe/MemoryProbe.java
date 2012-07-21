@@ -11,11 +11,15 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
+import com.saaswatch.agent.model.MemoryModel;
+
 public class MemoryProbe {
 
 	private static final int EXIT_ERROR = 1;
 	private static final int EXIT_NORMAL = 0;
 
+	private final int DURATION = 1000; // ms
+	
 	private static final String JMX_SERVICE_URL = "service:jmx:rmi:///jndi/rmi://localhost:9999/jmxrmi";
 
 	JMXServiceURL jmxServiceURL;
@@ -23,6 +27,8 @@ public class MemoryProbe {
 	MBeanServerConnection mBeanServerConnection;
 
 	MemoryMXBean mxBean;
+	
+	MemoryModel memoryModel = MemoryModel.getInstance();
 	
 	private static volatile boolean isStop;
 
@@ -68,21 +74,35 @@ public class MemoryProbe {
 					MemoryUsage heapMemoryUsage = mxBean.getHeapMemoryUsage();
 					MemoryUsage nonHeapMemoryUsage = mxBean.getNonHeapMemoryUsage();
 
-					long nonHeapCommited = nonHeapMemoryUsage.getCommitted();
+					long nonHeapCommitted = nonHeapMemoryUsage.getCommitted();
 					long nonHeapInit = nonHeapMemoryUsage.getInit();
 					long nonHeapMax = nonHeapMemoryUsage.getMax();
 					long nonHeapUsed = nonHeapMemoryUsage.getUsed();
 					
-					long heapCommited = heapMemoryUsage.getCommitted();
+					long heapCommitted = heapMemoryUsage.getCommitted();
 					long heapInit = heapMemoryUsage.getInit();
 					long heapMax = heapMemoryUsage.getMax();
 					long heapUsed = heapMemoryUsage.getUsed();
 
-					System.out.println("nonHeapCommited:" + nonHeapCommited + " nonHeapInit:" + nonHeapInit
-							+ " nonHeapMax:" + nonHeapMax + " nonHeapUsed:" + nonHeapUsed + " heapCommited:" + heapCommited + " heapInit:" + heapInit
+					
+					System.out.println("nonHeapCommited:" + nonHeapCommitted + " nonHeapInit:" + nonHeapInit
+							+ " nonHeapMax:" + nonHeapMax + " nonHeapUsed:" + nonHeapUsed + " heapCommited:" + heapCommitted + " heapInit:" + heapInit
 							+ " heapMax:" + heapMax + " heapUsed:" + heapUsed);
+					
+					
+					memoryModel.setNonHeapCommitted(nonHeapCommitted);
+					memoryModel.setNonHeapInit(nonHeapInit);
+					memoryModel.setNonHeapMax(nonHeapMax);
+					memoryModel.setNonHeapUsed(nonHeapUsed);
+					
+					memoryModel.setHeapCommitted(heapCommitted);
+					memoryModel.setHeapInit(heapInit);
+					memoryModel.setHeapMax(heapMax);
+					memoryModel.setHeapUsed(heapUsed);
+					
+					
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(DURATION);
 					} catch (InterruptedException e) {
 						processError(e);
 					}
