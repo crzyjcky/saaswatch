@@ -5,16 +5,25 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
 
-public class RESTServer {
+public class RESTServer implements Runnable {
 	
 	private static final int PORT = 9091;
 	
 	Server server;
 	
-	public RESTServer() {
+	
+	public static RESTServer create() {
+		RESTServer server = new RESTServer();
+		Thread thread = new Thread(server);
+		thread.start();
+		return server;
 	}
 	
-	public void start() {
+	
+	private RESTServer() {
+	}
+	
+	public void run() {
 		server = new Server(PORT);
 		
 		ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);

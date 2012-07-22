@@ -56,6 +56,8 @@ public class Agent {
 		mBeanServer.registerMBean(jmxConnectorServerMBean, new ObjectName(DOMAIN,
 				"name", "jmxConnectorServer"));		
 		
+		RESTServer restServer = RESTServer.create();
+		//restServer.start();
 		
 		discoveryResponderMBean.start();
 		jmxConnectorServerMBean.start();
@@ -63,9 +65,6 @@ public class Agent {
 		
 		memoryProbe = MemoryProbe.create();
 		operatingSystemProbe = OperatingSystemProbe.create();
-		
-		RESTServer restServer = new RESTServer();
-		restServer.start();
 		
 	}
 
