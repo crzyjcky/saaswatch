@@ -1,9 +1,11 @@
 package com.saaswatch.agent.server.dto;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "memory")
-public class MemoryDTO {
+public class MemoryDTO implements Serializable {
 	
 	private long committed;
 	private long init;

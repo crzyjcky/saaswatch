@@ -1,0 +1,8 @@
+J:\temp2\jetty-distribution-8.1.3.v20120416>jconsole -J-Djava.class.path="%JAVA_HOME%\lib\jconsole.jar";"%JAVA_HOME%\lib\tools.jar";H:\b2u\projects\workspace-sts-2.5.1.RELEASE\jmx-agent-helloworld\bin
+
+
+java -D -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.port=9999  -Dcom.sun.management.jmxremote.ssl=false  -cp . DummyApp
+
+
+
+jconsole -J-Djava.class.path="%JAVA_HOME%\lib\jconsole.jar";"%JAVA_HOME%\lib\tools.jar";H:\b2u\projects\workspace-sts-2.5.1.RELEASE\jmx-agent-broadcaster\bin
