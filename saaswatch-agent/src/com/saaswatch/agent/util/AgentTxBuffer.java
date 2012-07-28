@@ -1,6 +1,7 @@
 package com.saaswatch.agent.util;
 
 import java.io.Serializable;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -60,21 +61,18 @@ public class AgentTxBuffer implements IAgentTxBuffer {
 	public List<DataPacket> getAndClear() {
 		
 		String querySQL = "SELECT DATA_TYPE, DATA FROM BUFFER";
-		PreparedStatement queryPreparedStatement;
-		ResultSet rs;
-		
 		String clearSQL = "TRUNCATE TABBLE BUFFER";
-		PreparedStatement clearPreparedStatement;
 		
 		List<DataPacket> dataPackets = new ArrayList<DataPacket>();
 		
 		try {
 			
-			queryPreparedStatement = conn.prepareStatement(querySQL);
+			PreparedStatement queryPreparedStatement = conn.prepareStatement(querySQL);
 			
+			// start transaction
 			conn.setAutoCommit(false);
 			
-			rs = queryPreparedStatement.executeQuery();
+			ResultSet rs = queryPreparedStatement.executeQuery();
 			
 			while (rs.next())
 			{
@@ -86,8 +84,8 @@ public class AgentTxBuffer implements IAgentTxBuffer {
 				dataPackets.add(dataPacket);
 			}
 			
-			clearPreparedStatement = conn.prepareStatement(clearSQL);
-			clearPreparedStatement.execute();
+			PreparedStatement clearPreparedStatement = conn.prepareStatement(clearSQL);
+			clearPreparedStatement.executeUpdate();
 			
 		} catch (SQLException e) {
 
@@ -127,6 +125,22 @@ public class AgentTxBuffer implements IAgentTxBuffer {
 	
 	@Override
 	public void add(DataPacket dataPacket) {
+		
+		String insertSQL = "INSERT INTO BUFFER(DATA_TYPE, DATA) VALUES(?, ?)";
+		
+		try {
+			
+			PreparedStatement insertPreparedStatement = conn.prepareStatement(insertSQL);
+			
+			insertPreparedStatement.setString(COLUMN_DATA_TYPE, dataPacket.getType());
+			insertPreparedStatement.setBlob(COLUMN_DATA, (Blob) dataPacket.getPayload());
+			
+			insertPreparedStatement.executeUpdate();
+		} catch (SQLException e) {
+
+			processError(e);
+		}
+		
 		
 	}
 	
