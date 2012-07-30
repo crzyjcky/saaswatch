@@ -15,7 +15,7 @@ import com.saaswatch.agent.communicator.datapacketformat.DataPacket;
 public class AgentTxBuffer implements IAgentTxBuffer {
 
 	private final String DRIVER_CLASS_NAME = "org.h2.Driver";
-	private final String DATABASE = "jdbc:h2:~/test";
+	private final String DATABASE = "jdbc:h2:~/saaswatch";//"jdbc:h2:~/jobqueue";//"jdbc:h2:~/buffer";
 	private final String USER_NAME = "sa";
 	private final String PASSWORD = "";
 	
@@ -61,7 +61,7 @@ public class AgentTxBuffer implements IAgentTxBuffer {
 	public List<DataPacket> getAndClear() {
 		
 		String querySQL = "SELECT DATA_TYPE, DATA FROM BUFFER";
-		String clearSQL = "TRUNCATE TABBLE BUFFER";
+		String clearSQL = "TRUNCATE TABLE BUFFER";
 		
 		List<DataPacket> dataPackets = new ArrayList<DataPacket>();
 		
@@ -76,6 +76,9 @@ public class AgentTxBuffer implements IAgentTxBuffer {
 			
 			while (rs.next())
 			{
+		
+				System.out.println(rs.getString(1));
+				
 				DataPacket dataPacket = new DataPacket();
 				
 				dataPacket.setType(rs.getString(COLUMN_DATA_TYPE));
@@ -101,25 +104,6 @@ public class AgentTxBuffer implements IAgentTxBuffer {
 			} 
 		}
 		
-		// test data
-		/*
-		List<DataPacket> dataPackets = new ArrayList<DataPacket>();
-		
-		MemoryDTO memoryDTO = new MemoryDTO();
-		memoryDTO.setCommitted(1);
-		memoryDTO.setInit(2);
-		memoryDTO.setMax(3);
-		memoryDTO.setUsed(4);
-		
-		DataPacket dataPacket = new DataPacket();
-		dataPacket.setType("MEMORY");
-		dataPacket.setPayload(memoryDTO);
-		
-		dataPackets.add(dataPacket);
-		// simulate 2 elements
-		dataPackets.add(dataPacket);
-		*/
-		
 		return dataPackets;
 	}
 	
@@ -140,8 +124,6 @@ public class AgentTxBuffer implements IAgentTxBuffer {
 
 			processError(e);
 		}
-		
-		
 	}
 	
 	private void processError(Exception e) {
