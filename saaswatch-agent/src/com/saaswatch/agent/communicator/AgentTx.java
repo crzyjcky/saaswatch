@@ -6,11 +6,15 @@ import java.util.List;
 import javax.management.Notification;
 import javax.management.NotificationBroadcasterSupport;
 
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+
 import com.saaswatch.agent.communicator.datapacketformat.DataPacket;
 import com.saaswatch.agent.util.AgentTxBuffer;
 import com.saaswatch.agent.util.IAgentTxBuffer;
 
-public class AgentTx extends NotificationBroadcasterSupport implements AgentTxMBean {
+public class AgentTx extends NotificationBroadcasterSupport implements AgentTxMBean, Job {
 	
 	public static final String NOTIFICATION_TYPE = "SAASWATCH_AGENT_DATA_PACKETS";
 	
@@ -34,7 +38,13 @@ public class AgentTx extends NotificationBroadcasterSupport implements AgentTxMB
 	
 	@Override
 	public void getDataPacketsAsync() {
-		// TODO Auto-generated method stub
+		
+		sendDataPackets();
+	}
+
+	@Override
+	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+		
 		sendDataPackets();
 	}
 }
