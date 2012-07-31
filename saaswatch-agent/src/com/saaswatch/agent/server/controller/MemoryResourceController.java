@@ -7,25 +7,18 @@ public class MemoryResourceController {
 	
 	MemoryModel memoryModel = MemoryModel.getInstance();
 	
-	public MemoryDTO getNonHeapMemoryDTO() {
-		
+	public MemoryDTO getMemoryDTO() {
 		MemoryDTO memoryDTO = new MemoryDTO();
 		
-		memoryDTO.setCommitted(memoryModel.getNonHeapCommitted());
-		memoryDTO.setInit(memoryModel.getNonHeapInit());
-		memoryDTO.setMax(memoryModel.getNonHeapMax());
-		memoryDTO.setUsed(memoryModel.getNonHeapUsed());
+		memoryDTO.setNonHeapCommitted(memoryModel.getNonHeapCommitted());
+		memoryDTO.setNonHeapInit(memoryModel.getNonHeapInit());
+		memoryDTO.setNonHeapMax(memoryModel.getNonHeapMax());
+		memoryDTO.setNonHeapUsed(memoryModel.getNonHeapUsed());
 		
-		return memoryDTO;
-	}
-	
-	public MemoryDTO getHeapMemoryDTO() {
-		MemoryDTO memoryDTO = new MemoryDTO();
-		
-		memoryDTO.setCommitted(memoryModel.getHeapCommitted());
-		memoryDTO.setInit(memoryModel.getHeapInit());
-		memoryDTO.setMax(memoryModel.getHeapMax());
-		memoryDTO.setUsed(memoryModel.getHeapUsed());
+		memoryDTO.setHeapCommitted(memoryModel.getHeapCommitted());
+		memoryDTO.setHeapInit(memoryModel.getHeapInit());
+		memoryDTO.setHeapMax(memoryModel.getHeapMax());
+		memoryDTO.setHeapUsed(memoryModel.getHeapUsed());
 		
 		return memoryDTO;
 	}

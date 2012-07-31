@@ -90,7 +90,4 @@ public class MemoryModel {
 		this.nonHeapUsed = nonHeapUsed;
 	}
 
-	public static void setInstance(MemoryModel instance) {
-		MemoryModel.instance = instance;
-	}
 }

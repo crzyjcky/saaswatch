@@ -7,15 +7,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/memoryResource/v0/")
-public interface IMemoryResource
-{
+public interface IMemoryResource {
+
 	@GET
-	@Path("/nonHeapMemory")
+	@Path("/memory")
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public Response getNonHeapMemory();
-		
-	@GET
-	@Path("/heapMemory")
-	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public Response getHeapMemory();
+	public Response getMemory();
+
 }

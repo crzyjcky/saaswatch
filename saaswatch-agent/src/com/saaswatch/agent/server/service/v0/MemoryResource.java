@@ -21,6 +21,7 @@ public class MemoryResource implements IMemoryResource {
 		controller = new MemoryResourceController();
 	}
 	
+	/*
 	@GET
 	@Path("/nonHeapMemory")
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -40,5 +41,16 @@ public class MemoryResource implements IMemoryResource {
 		
 		return Response.ok(memoryDTO).build();
 	}
-
+*/
+	
+	@Override
+	@GET
+	@Path("/memory")
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	public Response getMemory() {
+		
+		MemoryDTO memoryDTO = controller.getMemoryDTO();
+		
+		return Response.ok(memoryDTO).build();
+	}
 }

@@ -17,6 +17,7 @@ import org.quartz.JobExecutionException;
 
 import com.saaswatch.agent.communicator.datapacketformat.DataPacket;
 import com.saaswatch.agent.model.MemoryModel;
+import com.saaswatch.agent.server.dto.MemoryDTO;
 import com.saaswatch.agent.util.AgentTxBuffer;
 import com.saaswatch.agent.util.IAgentTxBuffer;
 
@@ -172,7 +173,18 @@ public class MemoryProbe implements Job {
 		
 		DataPacket dataPacket = new DataPacket();
 		
-		/* need to refactor memoryDTO */
+		MemoryDTO memoryDTO = new MemoryDTO();
+		memoryDTO.setHeapCommitted(heapCommitted);
+		memoryDTO.setHeapInit(heapInit);
+		memoryDTO.setHeapMax(heapMax);
+		memoryDTO.setHeapUsed(heapUsed);
+		memoryDTO.setNonHeapCommitted(nonHeapCommitted);
+		memoryDTO.setNonHeapInit(nonHeapInit);
+		memoryDTO.setNonHeapMax(nonHeapMax);
+		memoryDTO.setNonHeapUsed(nonHeapUsed);
+		
+		dataPacket.setType("MEMORY_DATA_PACKET");
+		dataPacket.setPayload(memoryDTO);
 		
 		agentTxBuffer.add(dataPacket);
 	}
