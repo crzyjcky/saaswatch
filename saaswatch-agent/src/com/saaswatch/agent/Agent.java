@@ -45,7 +45,7 @@ public class Agent {
 	private final int MEMORY_PROBE_DURATION = 2;
 	private final int OPERATING_SYSTEM_PROBE_DURATION = 2;
 	
-	private final int AGENT_TX_DURATION = 5;
+	private final int AGENT_TX_DURATION = 60;
 
 	private MBeanServer mBeanServer;
 	private DiscoveryResponderMBean discoveryResponderMBean;

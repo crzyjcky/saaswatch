@@ -16,6 +16,11 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import com.saaswatch.agent.communicator.datapacketformat.DataPacket;
+import com.saaswatch.agent.server.dto.OperatingSystemDTO;
+import com.saaswatch.agent.util.AgentTxBuffer;
+import com.saaswatch.agent.util.IAgentTxBuffer;
+
 public class OperatingSystemProbe implements Job {
 
 	private static final int EXIT_ERROR = 1;
@@ -29,7 +34,8 @@ public class OperatingSystemProbe implements Job {
 
 	private OperatingSystemMXBean mxBean;
 
-	private static volatile boolean isStop;
+	//private static volatile boolean isStop;
+	IAgentTxBuffer agentTxBuffer = AgentTxBuffer.getInstance();
 
 	public OperatingSystemProbe() {
 		try {
@@ -123,6 +129,20 @@ public class OperatingSystemProbe implements Job {
 		System.out.println("arch:" + arch + " availableProcessors:"
 				+ availableProcessors + " name:" + name + " systemLoadAverage:"
 				+ systemLoadAverage + " version:" + version);
-
+		
+		
+		
+		OperatingSystemDTO osDTO = new OperatingSystemDTO();
+		osDTO.setArch(arch);
+		osDTO.setAvailableProcessors(availableProcessors);
+		osDTO.setName(name);
+		osDTO.setSystemLoadAverage(systemLoadAverage);
+		osDTO.setVersion(version);
+		
+		DataPacket dataPacket = new DataPacket();
+		dataPacket.setType("OPERATING_SYSTEM_DATA_PACKET");
+		dataPacket.setPayload(osDTO);
+		
+		agentTxBuffer.add(dataPacket);
 	}
 }

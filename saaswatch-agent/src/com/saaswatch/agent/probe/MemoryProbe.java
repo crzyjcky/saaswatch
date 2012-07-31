@@ -15,7 +15,10 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import com.saaswatch.agent.communicator.datapacketformat.DataPacket;
 import com.saaswatch.agent.model.MemoryModel;
+import com.saaswatch.agent.util.AgentTxBuffer;
+import com.saaswatch.agent.util.IAgentTxBuffer;
 
 public class MemoryProbe implements Job {
 
@@ -34,6 +37,7 @@ public class MemoryProbe implements Job {
 
 	private MemoryModel memoryModel = MemoryModel.getInstance();
 
+	IAgentTxBuffer agentTxBuffer = AgentTxBuffer.getInstance();
 	//private static volatile boolean isStop;
 
 	public MemoryProbe() {
@@ -165,6 +169,11 @@ public class MemoryProbe implements Job {
 		memoryModel.setHeapInit(heapInit);
 		memoryModel.setHeapMax(heapMax);
 		memoryModel.setHeapUsed(heapUsed);
-
+		
+		DataPacket dataPacket = new DataPacket();
+		
+		/* need to refactor memoryDTO */
+		
+		agentTxBuffer.add(dataPacket);
 	}
 }

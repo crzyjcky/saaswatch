@@ -15,7 +15,10 @@ import com.saaswatch.agent.communicator.datapacketformat.DataPacket;
 public class AgentTxBuffer implements IAgentTxBuffer {
 
 	private final String DRIVER_CLASS_NAME = "org.h2.Driver";
-	private final String DATABASE = "jdbc:h2:~/saaswatch";//"jdbc:h2:~/jobqueue";//"jdbc:h2:~/buffer";
+	private final String DATABASE = "jdbc:h2:~/saaswatch";
+	//private final String DATABASE = "jdbc:h2:~/saaswatch;FILE_LOCK=NO";
+	// server mode, to avoid locking accidentally
+	//private final String DATABASE = "jdbc:h2:tcp://localhost:8084/~/saaswatch";
 	private final String USER_NAME = "sa";
 	private final String PASSWORD = "";
 	
@@ -24,7 +27,7 @@ public class AgentTxBuffer implements IAgentTxBuffer {
 	
 	private final int EXIT_ERROR = 1;
 	
-	public static IAgentTxBuffer instance;
+	public static AgentTxBuffer instance;
 	
 	private Connection conn;
 	
@@ -82,7 +85,7 @@ public class AgentTxBuffer implements IAgentTxBuffer {
 				DataPacket dataPacket = new DataPacket();
 				
 				dataPacket.setType(rs.getString(COLUMN_DATA_TYPE));
-				dataPacket.setPayload((Serializable) rs.getBlob(COLUMN_DATA));
+				dataPacket.setPayload((Serializable) rs.getObject(COLUMN_DATA));
 				
 				dataPackets.add(dataPacket);
 			}
@@ -117,9 +120,12 @@ public class AgentTxBuffer implements IAgentTxBuffer {
 			PreparedStatement insertPreparedStatement = conn.prepareStatement(insertSQL);
 			
 			insertPreparedStatement.setString(COLUMN_DATA_TYPE, dataPacket.getType());
-			insertPreparedStatement.setBlob(COLUMN_DATA, (Blob) dataPacket.getPayload());
+			//insertPreparedStatement.setBlob(COLUMN_DATA, (Blob) dataPacket.getPayload());
+			insertPreparedStatement.setObject(COLUMN_DATA, dataPacket.getPayload());
 			
+			System.out.println("payload: " + dataPacket.getPayload());
 			insertPreparedStatement.executeUpdate();
+			
 		} catch (SQLException e) {
 
 			processError(e);
